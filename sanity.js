@@ -5,7 +5,7 @@ const client = sanityClient({
   projectId: 'ypx28ljq',
   dataset: 'production',
   apiVersion: '2021-10-21',
-  token: 'sanity-auth-token',
+  token: process.env.SANITY_AUTH_TOKEN,
   useCdn: true,
 });
 
