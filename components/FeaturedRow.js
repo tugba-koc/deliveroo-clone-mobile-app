@@ -49,7 +49,7 @@ const FeaturedRow = ({ title, description, id }) => {
               imgUrl={itemData.item.image}
               title={itemData.item.name}
               rating={itemData.item.rating}
-              genre={itemData.item.type?.name}
+              genre={itemData.item.type?.name ? itemData.item.type?.name: 'taste' }
               address={itemData.item.address}
               short_description={itemData.item.short_description}
               dishes={itemData.item.dishes}
