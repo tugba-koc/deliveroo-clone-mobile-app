@@ -1,4 +1,11 @@
-import { View, Text, Image, TextInput, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   AdjustmentsVerticalIcon,
@@ -8,8 +15,28 @@ import {
 } from 'react-native-heroicons/outline';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
+import { useEffect, useState } from 'react';
+import sanityClient from '../sanity';
 
 const Home = () => {
+  const [featuredCategories, setFeaturedCategories] = useState([]);
+
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `
+    *[_type == 'featured'] {
+      ...,
+      restaurants[]->{
+        ...,
+        dishes[]->
+      }
+    }
+    `
+      )
+      .then((data) => setFeaturedCategories(data));
+  }, []);
+
   return (
     <SafeAreaView className='bg-white pt-5'>
       {/* Header */}
@@ -43,28 +70,28 @@ const Home = () => {
       </View>
 
       {/* Body */}
-      <ScrollView contentContainerStyle={{
-        paddingBottom: 100
-      }} className='bg-gray-100'>
-
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}
+        className='bg-gray-100'
+      >
         {/* Categories */}
         <Categories />
 
         {/* Featured Rows */}
-        <FeaturedRow 
-          title='Featured'
-          description='Paid placements for our partners'
-          id='123'
-        />
-        <FeaturedRow
-          title='Tast Discounts'
-          id='1234'
-          description='Paid placements for our partners'
-        />
-        <FeaturedRow 
-          title='Offers near you!'
-          id='12345'
-          description='Paid placements for our partners'
+        <FlatList
+          data={featuredCategories}
+          keyExtractor={(category, index) => {
+            return category._id;
+          }}
+          renderItem={(itemData) => (
+            <FeaturedRow
+              title={itemData.item.name}
+              description={itemData.item.short_description}
+              id={itemData.item._id}
+            />
+          )}
         />
       </ScrollView>
     </SafeAreaView>
