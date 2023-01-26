@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { urlFor } from '../sanity';
 import {
@@ -9,6 +16,7 @@ import {
   StarIcon,
 } from 'react-native-heroicons/outline';
 import DishRow from '../components/DishRow';
+import BasketPopup from '../components/BasketPopup';
 
 const Restaurant = ({ route, navigation }) => {
   const {
@@ -25,6 +33,7 @@ const Restaurant = ({ route, navigation }) => {
   } = route.params;
   return (
     <SafeAreaView>
+      <BasketPopup />
       <ScrollView>
         <View className='relative'>
           <Image
