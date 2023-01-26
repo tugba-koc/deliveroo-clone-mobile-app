@@ -17,6 +17,8 @@ import {
 } from 'react-native-heroicons/outline';
 import DishRow from '../components/DishRow';
 import BasketPopup from '../components/BasketPopup';
+import { useDispatch } from 'react-redux';
+import { setRestaurant } from '../redux/reducer/restaurantSlice';
 
 const Restaurant = ({ route, navigation }) => {
   const {
@@ -31,8 +33,27 @@ const Restaurant = ({ route, navigation }) => {
     long,
     lat,
   } = route.params;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      setRestaurant({
+        id,
+        imgUrl,
+        title,
+        rating,
+        genre,
+        address,
+        short_description,
+        dishes,
+        long,
+        lat,
+      })
+    );
+  }, [dispatch]);
+
   return (
-    <SafeAreaView>
+    <SafeAreaView className='h-screen'>
       <BasketPopup />
       <ScrollView>
         <View className='relative'>
@@ -70,14 +91,14 @@ const Restaurant = ({ route, navigation }) => {
             </View>
             <Text className='text-gray-500 mt-2 pb-4'>{short_description}</Text>
           </View>
-          <TouchableOpacity className='flex-row items-center space-x-2 border-y border-gray-300'>
+          <TouchableOpacity className='flex-row items-center space-x-2 border-y border-gray-300 px-4'>
             <QuestionMarkCircleIcon color='gray' opacity={0.6} size={20} />
             <Text className='pl-2 flex-1 text-md font-bold'>
               Have a food allergy?
             </Text>
             <ChevronRightIcon color='#00CCBB' />
           </TouchableOpacity>
-          <View>
+          <View className='pb-36'>
             <Text className='px-4 pt-6 mb-3 font-bold text-xl'>Menu</Text>
             {/* Dish Rows */}
             <FlatList
