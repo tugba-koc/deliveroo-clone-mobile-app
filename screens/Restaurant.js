@@ -17,8 +17,13 @@ import {
 } from 'react-native-heroicons/outline';
 import DishRow from '../components/DishRow';
 import BasketPopup from '../components/BasketPopup';
-import { useDispatch } from 'react-redux';
-import { setRestaurant } from '../redux/reducer/restaurantSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setRestaurant,
+  selectRestaurant,
+} from '../redux/reducer/restaurantSlice';
+import { useEffect, useState } from 'react';
+import EmptyBasketModal from '../components/EmptyBasketModal';
 
 const Restaurant = ({ route, navigation }) => {
   const {
@@ -34,6 +39,8 @@ const Restaurant = ({ route, navigation }) => {
     lat,
   } = route.params;
   const dispatch = useDispatch();
+  const [isShownModal, setIsShownModal] = useState(false);
+  const restaurant = useSelector(selectRestaurant);
 
   useEffect(() => {
     dispatch(
@@ -54,7 +61,11 @@ const Restaurant = ({ route, navigation }) => {
 
   return (
     <SafeAreaView className='h-screen'>
-      <BasketPopup />
+      {isShownModal ? (
+        <EmptyBasketModal setIsShownModal={setIsShownModal} />
+      ) : (
+        <BasketPopup />
+      )}
       <ScrollView>
         <View className='relative'>
           <Image
@@ -109,11 +120,14 @@ const Restaurant = ({ route, navigation }) => {
               }}
               renderItem={(dishes) => (
                 <DishRow
+                  setIsShownModal={setIsShownModal}
+                  disabled={isShownModal}
                   id={dishes.item._id}
                   name={dishes.item.name}
                   image={dishes.item.image}
                   price={dishes.item.price}
                   description={dishes.item.short_description}
+                  restaurantId={restaurant.id}
                 />
               )}
             />

@@ -9,17 +9,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addToBasket,
   removeFromBasket,
-  selectItems,
+  selectBasketItems,
   selectBasketItemsWithId,
+  selectBasketRestaurantId,
+  setBasketRestaurantId,
 } from '../redux/reducer/basketSlice';
 
-const DishRow = ({ id, name, description, price, image }) => {
+const DishRow = ({
+  id,
+  name,
+  description,
+  price,
+  image,
+  restaurantId,
+  setIsShownModal,
+}) => {
   const [isPressed, setIsPressed] = useState(false);
   const dispatch = useDispatch();
   const items = useSelector((state) => selectBasketItemsWithId(state, id));
+  const basketRestaurantId = useSelector(selectBasketRestaurantId);
 
   const addItemToBasket = () => {
-    dispatch(addToBasket({ id, name, description, price, image }));
+    if (basketRestaurantId && basketRestaurantId !== restaurantId) {
+      setIsShownModal(true);
+    } else {
+      dispatch(
+        addToBasket({
+          basket: { id, name, description, price, image },
+          id: restaurantId,
+        })
+      );
+    }
   };
 
   const removeItemFromBasket = () => {
@@ -54,7 +74,10 @@ const DishRow = ({ id, name, description, price, image }) => {
       {isPressed ? (
         <View className='bg-white px-4'>
           <View className='flex-row items-center space-x-2 pb-3'>
-            <TouchableOpacity onPress={removeItemFromBasket} disabled={!items.length}>
+            <TouchableOpacity
+              onPress={removeItemFromBasket}
+              disabled={!items.length}
+            >
               <MinusCircleIcon
                 color={items.length > 0 ? '#00CCBB' : '#DFDFDF'}
                 size={40}

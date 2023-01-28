@@ -1,13 +1,16 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectItems, selectTotalBasket } from '../redux/reducer/basketSlice';
+import { selectBasketItems, selectTotalBasket } from '../redux/reducer/basketSlice';
 import { useNavigation } from '@react-navigation/native';
 
 const BasketPopup = () => {
-  const items = useSelector(selectItems);
+  const items = useSelector(selectBasketItems);
   const navigation = useNavigation();
   const totalBasket = useSelector(selectTotalBasket);
+
+  if(!items.length) return;
+
   return (
     <View className='absolute bottom-10 w-full z-50'>
       <TouchableOpacity className='mx-5 p-4 rounded-lg flex-row items-center space-x-1 bg-[#00CCBB]'>
