@@ -66,7 +66,7 @@ const Restaurant = ({ route, navigation }) => {
       ) : (
         <BasketPopup />
       )}
-      <ScrollView>
+      <View>
         <View className='relative'>
           <Image
             source={{
@@ -127,13 +127,13 @@ const Restaurant = ({ route, navigation }) => {
                   image={dishes.item.image}
                   price={dishes.item.price}
                   description={dishes.item.short_description}
-                  restaurantId={restaurant.id}
+                  restaurant={restaurant}
                 />
               )}
             />
           </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

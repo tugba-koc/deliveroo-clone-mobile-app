@@ -12,7 +12,7 @@ const EmptyBasketModal = ({ setIsShownModal }) => {
       <View className='mx-auto opacity-100 my-auto p-4 rounded-lg space-x-1 bg-[#e7820f] w-11/12 h-auto'>
         <Text className='text-white font-normal text-lg'>
           There shouldn't be any product from different restaurants. In order
-          for adding a product grom this restaurant, do you want to empty your
+          for adding a product from this restaurant, do you want to empty your
           cart?
         </Text>
         <View className='pt-5 flex-row space-x-16 justify-end'>

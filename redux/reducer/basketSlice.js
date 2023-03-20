@@ -4,16 +4,16 @@ export const basketSlice = createSlice({
   name: 'basket',
   initialState: {
     items: [],
-    basketRestaurantId: null,
+    basketRestaurant: null,
   },
   reducers: {
     emptyBasket: (state) => {
       state.items = [];
-      state.basketRestaurantId = null;
+      state.basketRestaurant = null;
     },
     addToBasket: (state, action) => {
       state.items = [...state.items, action.payload.basket];
-      state.basketRestaurantId = action.payload.id;
+      state.basketRestaurant = action.payload.basketRestaurant;
     },
     removeFromBasket: (state, action) => {
       const index = state.items.findIndex((item) => item.id === action.payload);
@@ -22,7 +22,7 @@ export const basketSlice = createSlice({
         newBasket.splice(index, 1);
         state.items = newBasket;
       } else {
-        console.log('There is no product with this ' + action.payload);
+        // console.log('There is no product with this ' + action.payload);
       }
       if (!newBasket.length) {
         state.basketRestaurantId = null;
@@ -32,8 +32,8 @@ export const basketSlice = createSlice({
 });
 
 export const selectBasketItems = (state) => state.basket.items;
-export const selectBasketRestaurantId = (state) =>
-  state.basket.basketRestaurantId;
+export const selectBasketRestaurant = (state) =>
+  state.basket.basketRestaurant;
 
 // filter items sccording to its id.
 export const selectBasketItemsWithId = (state, id) =>

@@ -11,8 +11,7 @@ import {
   removeFromBasket,
   selectBasketItems,
   selectBasketItemsWithId,
-  selectBasketRestaurantId,
-  setBasketRestaurantId,
+  selectBasketRestaurant,
 } from '../redux/reducer/basketSlice';
 
 const DishRow = ({
@@ -21,22 +20,22 @@ const DishRow = ({
   description,
   price,
   image,
-  restaurantId,
+  restaurant,
   setIsShownModal,
 }) => {
   const [isPressed, setIsPressed] = useState(false);
   const dispatch = useDispatch();
   const items = useSelector((state) => selectBasketItemsWithId(state, id));
-  const basketRestaurantId = useSelector(selectBasketRestaurantId);
+  const basketRestaurant = useSelector(selectBasketRestaurant);
 
   const addItemToBasket = () => {
-    if (basketRestaurantId && basketRestaurantId !== restaurantId) {
+    if (basketRestaurant?.id && basketRestaurant?.id !== restaurant.id) {
       setIsShownModal(true);
     } else {
       dispatch(
         addToBasket({
           basket: { id, name, description, price, image },
-          id: restaurantId,
+          basketRestaurant: restaurant,
         })
       );
     }

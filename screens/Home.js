@@ -3,8 +3,8 @@ import {
   Text,
   Image,
   TextInput,
-  ScrollView,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -15,7 +15,7 @@ import {
 } from 'react-native-heroicons/outline';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import sanityClient from '../sanity';
 
 const Home = () => {
@@ -79,20 +79,16 @@ const Home = () => {
         {/* Categories */}
         <Categories />
 
+        {/* Instead of using Flatlist, map method is used because Flatlist inside ScrollView clashes.   */}
         {/* Featured Rows */}
-        <FlatList
-          data={featuredCategories}
-          keyExtractor={(category, index) => {
-            return category._id;
-          }}
-          renderItem={(itemData) => (
-            <FeaturedRow
-              title={itemData.item.name}
-              description={itemData.item.short_description}
-              id={itemData.item._id}
-            />
-          )}
-        />
+        {featuredCategories.map((featuredCategory) => (
+          <FeaturedRow
+            key={featuredCategory._id}
+            title={featuredCategory.name}
+            description={featuredCategory.short_description}
+            id={featuredCategory._id}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

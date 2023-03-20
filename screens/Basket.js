@@ -2,17 +2,17 @@ import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { selectRestaurant } from '../redux/reducer/restaurantSlice';
-import { selectBasketItems } from '../redux/reducer/basketSlice';
+import { selectBasketItems, selectBasketRestaurant, selectTotalBasket } from '../redux/reducer/basketSlice';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { XCircleIcon } from 'react-native-heroicons/outline';
 import BasketRow from '../components/BasketRow';
 
 const Basket = () => {
   const navigation = useNavigation();
-  const restaurant = useSelector(selectRestaurant);
+  const basketRestaurant = useSelector(selectBasketRestaurant);
   const [groupedOrderDish, setGroupedOrderDish] = useState([]);
   const items = useSelector(selectBasketItems);
+  const basketTotal = useSelector(selectTotalBasket);
 
   useEffect(() => {
     let counter = {};
@@ -31,7 +31,7 @@ const Basket = () => {
           <View>
             <Text className='text-lg font-bold text-center'>Basket</Text>
             <Text className='text-center text-gray-400'>
-              {restaurant.title}
+              {basketRestaurant.title}
             </Text>
           </View>
           <TouchableOpacity
@@ -53,11 +53,11 @@ const Basket = () => {
             <Text className='text-[#00CCBB]'>Change</Text>
           </TouchableOpacity>
         </View>
-
+        {/* Basket rows */}
         <FlatList
           data={groupedOrderDish}
           keyExtractor={(orderDish, index) => {
-            return orderDish.id;
+            return JSON.parse(orderDish[0]).id;
           }}
           renderItem={(itemData) => (
             <BasketRow
@@ -69,6 +69,27 @@ const Basket = () => {
             />
           )}
         />
+        {/* Total Payment calculation */}
+        <View className='p-5 mt-5 bg-white space-y-4'>
+          <View className='flex-row justify-between'>
+            <Text className='text-gray-400'>SubTotal</Text>
+            <Text className='text-gray-400'>{basketTotal} ₺</Text>
+          </View>
+
+          <View className='flex-row justify-between'>
+            <Text className='text-gray-400'>Delivery Fee</Text>
+            <Text className='text-gray-400'>5,9 ₺</Text>
+          </View>
+
+          <View className='flex-row justify-between'>
+            <Text>Order Total</Text>
+            <Text className='font-extrabold'>{basketTotal + 5.9} ₺</Text>
+          </View>
+
+          <TouchableOpacity onPress={()=> navigation.navigate('PreparingOrder')} className='rounded-lg bg-[#00CCBB] p-4'>
+            <Text className='font-bold text-white text-center text-lg'>Place Order</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

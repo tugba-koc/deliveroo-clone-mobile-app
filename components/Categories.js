@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ScrollView, FlatList } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import CategoryCard from './CategoryCard';
 import sanityClient from '../sanity';
 
